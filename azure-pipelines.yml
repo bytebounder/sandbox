@@ -51,9 +51,10 @@ jobs:
     #       $(Pipeline.Workspace)/README.md
     #       $(Pipeline.Workspace)/Index.html
     - task: GitHubRelease@1
+      displayName: "Create GitHub Release"
       inputs:
         gitHubConnection: 'myGithub'
-        repositoryName: 'jayanandagit/sandbox2'
+        repositoryName: 'jayanandagit/sandbox'
         action: 'create'
         target: '$(Build.SourceVersion)'
         tagSource: 'userSpecifiedTag'
