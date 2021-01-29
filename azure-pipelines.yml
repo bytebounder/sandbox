@@ -9,23 +9,43 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- task: GoTool@0
-  inputs:
-    version: '1.13.5'
-- task: Go@0
-  inputs:
-    command: 'get'
-    arguments: '-d'
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-- task: Go@0
-  inputs:
-    command: 'build'
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-- task: CopyFiles@2
-  inputs:
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-- task: PublishBuildArtifacts@1
-  inputs:
-    artifactName: drop_artifacts
+- stage: Build
+    jobs:
+      - job: Buildjob
+        steps:
+        - task: GoTool@0
+          inputs:
+            version: '1.13.5'
+        - task: Go@0
+          inputs:
+            command: 'get'
+            arguments: '-d'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - task: Go@0
+          inputs:
+            command: 'build'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - task: CopyFiles@2
+          inputs:
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        # - task: PublishBuildArtifacts@1
+        #   inputs:
+        #     artifactName: drop_artifacts
 
+- stage: Release
+    dependsOn: Build
+    jobs:
+      - job: ReleaseArtifacts
+        steps:
+          # Publish a Github Release for tagged commits
+          # See https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/github-release?view=azure-devops
+          - task: GithubRelease@0
+            displayName: "Create GitHub Release"
+            inputs:
+              gitHubConnection: myGithub
+              repositoryName: jayanandagit/sandbox
+              # build number is used as the tag version for the release
+              tag: $(Build.BuildNumber)  
+              assets: |
+                $(Pipeline.Workspace)/README.md
+                $(Pipeline.Workspace)/Index.html
