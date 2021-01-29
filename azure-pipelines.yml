@@ -8,7 +8,7 @@ resources:
   - repository: mySnadbox2 # The name used to reference this repository in the checkout step
     type: github
     endpoint: myGithub
-    name: jayanandagit/sandbox
+    name: jayanandagit/sandbox2
 
 trigger:
 - master
