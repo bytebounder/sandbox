@@ -3,6 +3,13 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+resources:
+  repositories:
+  - repository: mySnadbox2 # The name used to reference this repository in the checkout step
+    type: github
+    endpoint: myGithub
+    name: jayanandagit/sandbox
+
 trigger:
 - master
 
@@ -46,11 +53,11 @@ jobs:
     - task: GitHubRelease@1
       inputs:
         gitHubConnection: 'myGithub'
-        repositoryName: 'jayanandagit/sandbox'
+        repositoryName: 'jayanandagit/sandbox2'
         action: 'create'
         target: '$(Build.SourceVersion)'
         tagSource: 'userSpecifiedTag'
-        tag: '0.0.1'
+        tag: '0.0.2'
         title: 'First release'
         changeLogCompareToRelease: 'lastFullRelease'
         changeLogType: 'commitBased'
