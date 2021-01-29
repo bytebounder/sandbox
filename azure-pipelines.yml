@@ -33,13 +33,24 @@ jobs:
 
     # Publish a Github Release for tagged commits
     # See https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/github-release?view=azure-devops
-    - task: GithubRelease@0
-      displayName: "Create GitHub Release"
+    # - task: GithubRelease@0
+    #   displayName: "Create GitHub Release"
+    #   inputs:
+    #     gitHubConnection: myGithub
+    #     repositoryName: jayanandagit/sandbox
+    #     # build number is used as the tag version for the release
+    #     tag: $(Build.BuildNumber)  
+    #     assets: |
+    #       $(Pipeline.Workspace)/README.md
+    #       $(Pipeline.Workspace)/Index.html
+    - task: GitHubRelease@1
       inputs:
-        gitHubConnection: myGithub
-        repositoryName: jayanandagit/sandbox
-        # build number is used as the tag version for the release
-        tag: $(Build.BuildNumber)  
-        assets: |
-          $(Pipeline.Workspace)/README.md
-          $(Pipeline.Workspace)/Index.html
+        gitHubConnection: 'myGithub'
+        repositoryName: 'jayanandagit/sandbox'
+        action: 'create'
+        target: '$(Build.SourceVersion)'
+        tagSource: 'userSpecifiedTag'
+        tag: '0.0.1'
+        title: 'First release'
+        changeLogCompareToRelease: 'lastFullRelease'
+        changeLogType: 'commitBased'
