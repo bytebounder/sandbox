@@ -9,7 +9,8 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-- stage: Build
+stages:
+  - stage: Build
     jobs:
       - job: Buildjob
         steps:
@@ -32,7 +33,7 @@ pool:
         #   inputs:
         #     artifactName: drop_artifacts
 
-- stage: Release
+  - stage: Release
     dependsOn: Build
     jobs:
       - job: ReleaseArtifacts
